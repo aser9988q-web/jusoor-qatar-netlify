@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإدارة - جسور قطر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .admin-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        .admin-nav button {
+            padding: 10px 20px;
+            border: none;
+            background: #f0f0f0;
+            color: #333;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .admin-nav button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .admin-nav button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .admin-content {
+            padding: 30px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1em;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table thead {
+            background: #f5f5f5;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .action-buttons button {
+            padding: 5px 10px;
+            font-size: 0.9em;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .admin-nav {
+                flex-direction: column;
+            }
+
+            .admin-nav button {
+                width: 100%;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            table th,
+            table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🏢 لوحة إدارة جسور قطر</h1>
+            <p>إدارة الخدمات والموظفين والحجوزات</p>
+        </div>
+
+        <div class="admin-nav">
+            <button class="nav-btn active" data-section="dashboard">📊 لوحة التحكم</button>
+            <button class="nav-btn" data-section="services">🎯 الخدمات</button>
+            <button class="nav-btn" data-section="employees">👥 الموظفون</button>
+            <button class="nav-btn" data-section="bookings">📅 الحجوزات</button>
+            <button class="nav-btn" data-section="settings">⚙️ الإعدادات</button>
+        </div>
+
+        <div class="admin-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <h2>لوحة التحكم</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3 id="serviceCount">0</h3>
+                        <p>الخدمات النشطة</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="employeeCount">0</h3>
+                        <p>عدد الموظفين</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="bookingCount">0</h3>
+                        <p>إجمالي الحجوزات</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="pendingCount">0</h3>
+                        <p>الحجوزات المعلقة</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div id="services" class="section">
+                <h2>إدارة الخدمات</h2>
+                <button class="btn btn-primary" onclick="openServiceModal()">+ إضافة خدمة جديدة</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الخدمة</th>
+                            <th>الوصف</th>
+                            <th>السعر</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="servicesList">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #999;">جاري التحميل...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Employees Section -->
+            <div id="employees" class="section">
+                <h2>إدارة الموظفين</h2>
+                <button class="btn btn-primary" onclick="openEmployeeModal()">+ إضافة موظف جديد</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>الهاتف</th>
+                            <th>المنصب</th>
+                            <th>الراتب</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeesList">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: #999;">جاري التحميل...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Bookings Section -->
+            <div id="bookings" class="section">
+                <h2>إدارة الحجوزات</h2>
+                <button class="btn btn-primary" onclick="openBookingModal()">+ إضافة حجز جديد</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>اسم العميل</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>الهاتف</th>
+                            <th>الخدمة</th>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsList">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #999;">جاري التحميل...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="section">
+                <h2>الإعدادات</h2>
+                <div class="form-group">
+                    <label>اسم الموقع</label>
+                    <input type="text" value="جسور قطر" id="siteName">
+                </div>
+                <div class="form-group">
+                    <label>البريد الإلكتروني للدعم</label>
+                    <input type="email" value="support@jusoor.qa" id="supportEmail">
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف</label>
+                    <input type="tel" value="+974 4444 5555" id="phone">
+                </div>
+                <button class="btn btn-success" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="serviceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">إضافة خدمة جديدة</div>
+            <div class="form-group">
+                <label>اسم الخدمة</label>
+                <input type="text" id="serviceName">
+            </div>
+            <div class="form-group">
+                <label>الوصف</label>
+                <textarea id="serviceDescription"></textarea>
+            </div>
+            <div class="form-group">
+                <label>السعر</label>
+                <input type="number" id="servicePrice" step="0.01">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="saveService()">حفظ</button>
+                <button class="btn" onclick="closeModal('serviceModal')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Modal -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">إضافة موظف جديد</div>
+            <div class="form-group">
+                <label>الاسم</label>
+                <input type="text" id="employeeName">
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="employeeEmail">
+            </div>
+            <div class="form-group">
+                <label>الهاتف</label>
+                <input type="tel" id="employeePhone">
+            </div>
+            <div class="form-group">
+                <label>المنصب</label>
+                <input type="text" id="employeePosition">
+            </div>
+            <div class="form-group">
+                <label>الراتب</label>
+                <input type="number" id="employeeSalary" step="0.01">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="saveEmployee()">حفظ</button>
+                <button class="btn" onclick="closeModal('employeeModal')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">إضافة حجز جديد</div>
+            <div class="form-group">
+                <label>اسم العميل</label>
+                <input type="text" id="bookingCustomerName">
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="bookingCustomerEmail">
+            </div>
+            <div class="form-group">
+                <label>الهاتف</label>
+                <input type="tel" id="bookingCustomerPhone">
+            </div>
+            <div class="form-group">
+                <label>الخدمة</label>
+                <select id="bookingService"></select>
+            </div>
+            <div class="form-group">
+                <label>التاريخ والوقت</label>
+                <input type="datetime-local" id="bookingDate">
+            </div>
+            <div class="form-group">
+                <label>الحالة</label>
+                <select id="bookingStatus">
+                    <option value="pending">معلق</option>
+                    <option value="confirmed">مؤكد</option>
+                    <option value="completed">مكتمل</option>
+                    <option value="cancelled">ملغى</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="saveBooking()">حفظ</button>
+                <button class="btn" onclick="closeModal('bookingModal')">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.dataset.section).classList.add('active');
+            });
+        });
+
+        // Load data on page load
+        window.addEventListener('load', () => {
+            loadDashboard();
+            loadServices();
+            loadEmployees();
+            loadBookings();
+        });
+
+        // Dashboard
+        async function loadDashboard() {
+            try {
+                const services = await fetch(`${API_BASE}/services`).then(r => r.json());
+                const employees = await fetch(`${API_BASE}/employees`).then(r => r.json());
+                const bookings = await fetch(`${API_BASE}/bookings`).then(r => r.json());
+
+                document.getElementById('serviceCount').textContent = services.length;
+                document.getElementById('employeeCount').textContent = employees.length;
+                document.getElementById('bookingCount').textContent = bookings.length;
+                document.getElementById('pendingCount').textContent = bookings.filter(b => b.status === 'pending').length;
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        // Services
+        async function loadServices() {
+            try {
+                const response = await fetch(`${API_BASE}/services`);
+                const services = await response.json();
+                const tbody = document.getElementById('servicesList');
+                tbody.innerHTML = services.map(service => `
+                    <tr>
+                        <td>${service.name}</td>
+                        <td>${service.description || '-'}</td>
+                        <td>${service.price || '-'}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-primary" onclick="editService(${service.id})">تعديل</button>
+                            <button class="btn btn-danger" onclick="deleteService(${service.id})">حذف</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading services:', error);
+            }
+        }
+
+        // Employees
+        async function loadEmployees() {
+            try {
+                const response = await fetch(`${API_BASE}/employees`);
+                const employees = await response.json();
+                const tbody = document.getElementById('employeesList');
+                tbody.innerHTML = employees.map(emp => `
+                    <tr>
+                        <td>${emp.name}</td>
+                        <td>${emp.email || '-'}</td>
+                        <td>${emp.phone || '-'}</td>
+                        <td>${emp.position || '-'}</td>
+                        <td>${emp.salary || '-'}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-primary" onclick="editEmployee(${emp.id})">تعديل</button>
+                            <button class="btn btn-danger" onclick="deleteEmployee(${emp.id})">حذف</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading employees:', error);
+            }
+        }
+
+        // Bookings
+        async function loadBookings() {
+            try {
+                const response = await fetch(`${API_BASE}/bookings`);
+                const bookings = await response.json();
+                const tbody = document.getElementById('bookingsList');
+                tbody.innerHTML = bookings.map(booking => `
+                    <tr>
+                        <td>${booking.customer_name}</td>
+                        <td>${booking.customer_email || '-'}</td>
+                        <td>${booking.customer_phone || '-'}</td>
+                        <td>${booking.service_id}</td>
+                        <td>${new Date(booking.booking_date).toLocaleDateString('ar-QA')}</td>
+                        <td>${booking.status}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-primary" onclick="editBooking(${booking.id})">تعديل</button>
+                            <button class="btn btn-danger" onclick="deleteBooking(${booking.id})">حذف</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        // Modal functions
+        function openServiceModal() {
+            document.getElementById('serviceModal').classList.add('active');
+        }
+
+        function openEmployeeModal() {
+            document.getElementById('employeeModal').classList.add('active');
+        }
+
+        function openBookingModal() {
+            document.getElementById('bookingModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        async function saveService() {
+            const name = document.getElementById('serviceName').value;
+            const description = document.getElementById('serviceDescription').value;
+            const price = document.getElementById('servicePrice').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/services`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, description, price })
+                });
+
+                if (response.ok) {
+                    closeModal('serviceModal');
+                    loadServices();
+                    loadDashboard();
+                    alert('تم حفظ الخدمة بنجاح');
+                }
+            } catch (error) {
+                console.error('Error saving service:', error);
+                alert('حدث خطأ في حفظ الخدمة');
+            }
+        }
+
+        async function saveEmployee() {
+            const name = document.getElementById('employeeName').value;
+            const email = document.getElementById('employeeEmail').value;
+            const phone = document.getElementById('employeePhone').value;
+            const position = document.getElementById('employeePosition').value;
+            const salary = document.getElementById('employeeSalary').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/employees`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, position, salary })
+                });
+
+                if (response.ok) {
+                    closeModal('employeeModal');
+                    loadEmployees();
+                    loadDashboard();
+                    alert('تم حفظ الموظف بنجاح');
+                }
+            } catch (error) {
+                console.error('Error saving employee:', error);
+                alert('حدث خطأ في حفظ الموظف');
+            }
+        }
+
+        async function saveBooking() {
+            const customer_name = document.getElementById('bookingCustomerName').value;
+            const customer_email = document.getElementById('bookingCustomerEmail').value;
+            const customer_phone = document.getElementById('bookingCustomerPhone').value;
+            const service_id = document.getElementById('bookingService').value;
+            const booking_date = document.getElementById('bookingDate').value;
+            const status = document.getElementById('bookingStatus').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/bookings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customer_name, customer_email, customer_phone, service_id, booking_date, status })
+                });
+
+                if (response.ok) {
+                    closeModal('bookingModal');
+                    loadBookings();
+                    loadDashboard();
+                    alert('تم حفظ الحجز بنجاح');
+                }
+            } catch (error) {
+                console.error('Error saving booking:', error);
+                alert('حدث خطأ في حفظ الحجز');
+            }
+        }
+
+        function saveSettings() {
+            alert('تم حفظ الإعدادات بنجاح');
+        }
+
+        async function deleteService(id) {
+            if (confirm('هل أنت متأكد من حذف هذه الخدمة؟')) {
+                try {
+                    await fetch(`${API_BASE}/services/${id}`, { method: 'DELETE' });
+                    loadServices();
+                    loadDashboard();
+                    alert('تم حذف الخدمة بنجاح');
+                } catch (error) {
+                    console.error('Error deleting service:', error);
+                }
+            }
+        }
+
+        async function deleteEmployee(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الموظف؟')) {
+                try {
+                    await fetch(`${API_BASE}/employees/${id}`, { method: 'DELETE' });
+                    loadEmployees();
+                    loadDashboard();
+                    alert('تم حذف الموظف بنجاح');
+                } catch (error) {
+                    console.error('Error deleting employee:', error);
+                }
+            }
+        }
+
+        async function deleteBooking(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الحجز؟')) {
+                try {
+                    await fetch(`${API_BASE}/bookings/${id}`, { method: 'DELETE' });
+                    loadBookings();
+                    loadDashboard();
+                    alert('تم حذف الحجز بنجاح');
+                } catch (error) {
+                    console.error('Error deleting booking:', error);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
