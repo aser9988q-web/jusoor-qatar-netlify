@@ -1,0 +1,1 @@
+ضع الملف index.php داخل جذر الاستضافة، واترك مجلدي assets و fonts بجانبه.\nبيانات PDO تُمرر عبر متغيرات البيئة: PDO_HOST, PDO_DBNAME, PDO_USER, PDO_PASS.\n

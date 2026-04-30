@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>جسور - الشركة القطرية لحلول القوى البشرية</title>
+    <meta name="description" content="خدمات العمالة المنزلية في قطر - عمالة بالساعة والشهر واستقدام العمالة المنزلية">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://jusoor.lovable.app/" />
+
+    <!-- Open Graph (المطلوب فعليًا لواتساب/فيسبوك) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jusoor.lovable.app/" />
+    
+    
+    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/V5oTw3moOAfVRxfb8DYIY50MRqy2/social-images/social-1767004787454-jusour-og-1200x630.jpg">
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter (اختياري؛ لا يؤثر على واتساب لكن نتركه بسيط) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/V5oTw3moOAfVRxfb8DYIY50MRqy2/social-images/social-1767004787454-jusour-og-1200x630.jpg">
+    
+  
+  
+  
+  <meta property="og:title" content="جسور - الشركة القطرية لحلول القوى البشرية">
+  <meta name="twitter:title" content="جسور - الشركة القطرية لحلول القوى البشرية">
+  <meta property="og:description" content="خدمات العمالة المنزلية في قطر - عمالة بالساعة والشهر واستقدام العمالة المنزلية">
+  <meta name="twitter:description" content="خدمات العمالة المنزلية في قطر - عمالة بالساعة والشهر واستقدام العمالة المنزلية">
+  <script type="module" crossorigin src="/assets/index-C0LtNM7R.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-gK3PqAgV.css">
+</head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
